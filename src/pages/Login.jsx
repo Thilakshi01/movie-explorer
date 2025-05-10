@@ -9,22 +9,22 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+const Login = ({ setUser }) => {
+  const [username, setUsernameInput] = useState("");
+  const [password, setPasswordInput] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Simple local validation (no backend)
-    if (username.trim() === "" || password.trim() === "") {
+    if (!username.trim() || !password.trim()) {
       setError("Username and password are required");
       return;
     }
 
-    // Save login info in localStorage (mock auth)
-    localStorage.setItem("user", JSON.stringify({ username }));
+    const userData = { username };
+    localStorage.setItem("user", JSON.stringify(userData));
+    setUser(userData); // update App state
     navigate("/");
   };
 
@@ -45,7 +45,7 @@ const Login = () => {
             fullWidth
             margin="normal"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => setUsernameInput(e.target.value)}
           />
           <TextField
             label="Password"
@@ -53,15 +53,9 @@ const Login = () => {
             fullWidth
             margin="normal"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => setPasswordInput(e.target.value)}
           />
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            sx={{ mt: 2 }}
-            fullWidth
-          >
+          <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
             Login
           </Button>
         </Box>
