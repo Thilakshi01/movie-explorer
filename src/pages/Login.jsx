@@ -5,8 +5,10 @@ import {
   Button,
   Typography,
   Box,
-  Paper,
+  Switch,
+  FormControlLabel,
 } from "@mui/material";
+
 import { useNavigate } from "react-router-dom";
 
 const Login = ({ setUser }) => {
