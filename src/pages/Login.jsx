@@ -11,7 +11,7 @@ const Login = ({ setUser }) => {
       const newUser = { username };
       localStorage.setItem("user", JSON.stringify(newUser));
       setUser(newUser);
-      navigate("/"); // ✅ Redirects to Home after login
+      navigate("/"); 
     }
   };
 
