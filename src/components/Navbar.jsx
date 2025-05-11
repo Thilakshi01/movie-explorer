@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const Navbar = ({ darkMode, setDarkMode, user }) => {
   return (
-    <AppBar position="static" color=" #8B0000">
+    <AppBar position="static" sx={{ backgroundColor: '#8B0000' }}>
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Box>
           <Typography variant="h1" component={Link} to="/" sx={{ textDecoration: 'none', color: '#000000', mr: 5 }}>

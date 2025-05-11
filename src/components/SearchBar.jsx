@@ -1,23 +1,28 @@
-import React from "react";
-import { TextField, Button } from "@mui/material";
+import React from 'react';
+import { TextField, InputAdornment, Paper } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 
-const SearchBar = ({ setSearchQuery, setPage }) => {
-  const handleSearch = (event) => {
-    if (event.key === "Enter") {
-      setSearchQuery(event.target.value);
-      setPage(1);
-    }
-  };
-
+const SearchBar = ({ handleSearch }) => {
   return (
-    <div style={{ marginBottom: 20 }}>
+    <Paper elevation={3} sx={{ p: 2, mb: 3 }}>
       <TextField
-        label="Search Movies"
+        label="Search for movies..."
         variant="outlined"
         fullWidth
         onKeyPress={handleSearch}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon color="action" />
+            </InputAdornment>
+          ),
+        }}
+        sx={{
+          backgroundColor: 'white',
+          borderRadius: 1,
+        }}
       />
-    </div>
+    </Paper>
   );
 };
 

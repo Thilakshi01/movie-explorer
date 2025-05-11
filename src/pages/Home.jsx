@@ -12,9 +12,10 @@ const Home = () => {
 
   const fetchMovies = async (query = "", page = 1) => {
     setLoading(true);
+    const apiKey = process.env.REACT_APP_TMDB_API_KEY;
     try {
       const res = await axios.get(
-        `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_TMDB_API_KEY}&page=${page}`
+        `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&page=${page}`
       );
       setMovies(res.data.results);
     } catch (error) {
