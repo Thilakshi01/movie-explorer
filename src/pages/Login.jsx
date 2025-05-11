@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Container,
   TextField,
@@ -9,59 +10,97 @@ import {
   FormControlLabel,
 } from "@mui/material";
 
-import { useNavigate } from "react-router-dom";
 
 const Login = ({ setUser }) => {
-  const [username, setUsernameInput] = useState("");
-  const [password, setPasswordInput] = useState("");
-  const [error, setError] = useState("");
   const navigate = useNavigate();
+  const [isRegistering, setIsRegistering] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleLogin = (e) => {
+  const handleAuth = (e) => {
     e.preventDefault();
-    if (!username.trim() || !password.trim()) {
-      setError("Username and password are required");
-      return;
-    }
+    const users = JSON.parse(localStorage.getItem("users")) || [];
 
-    const userData = { username };
-    localStorage.setItem("user", JSON.stringify(userData));
-    setUser(userData); // update App state
-    navigate("/");
+    if (isRegistering) {
+      const userExists = users.find((u) => u.username === username);
+      if (userExists) {
+        setError("Username already taken.");
+        return;
+      }
+
+      const newUser = { username, password };
+      localStorage.setItem("users", JSON.stringify([...users, newUser]));
+      localStorage.setItem("user", JSON.stringify(newUser));
+      setUser(newUser);
+      navigate("/");
+    } else {
+      const user = users.find(
+        (u) => u.username === username && u.password === password
+      );
+      if (user) {
+        localStorage.setItem("user", JSON.stringify(user));
+        setUser(user);
+        navigate("/");
+      } else {
+        setError("Invalid username or password.");
+      }
+    }
   };
 
   return (
-    <Container maxWidth="sm">
-      <Paper elevation={3} sx={{ padding: 4, marginTop: 8 }}>
-        <Typography variant="h5" gutterBottom>
-          Login to Movie Explorer
+    <Container maxWidth="xs">
+      <Box sx={{ mt: 8 }}>
+        <Typography variant="h5" align="center" gutterBottom>
+          {isRegistering ? "Register" : "Login"}
         </Typography>
-        {error && (
-          <Typography color="error" variant="body2">
-            {error}
-          </Typography>
-        )}
-        <Box component="form" onSubmit={handleLogin} sx={{ mt: 2 }}>
+        <form onSubmit={handleAuth}>
           <TextField
-            label="Username"
             fullWidth
+            label="Username"
             margin="normal"
             value={username}
-            onChange={(e) => setUsernameInput(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)}
+            required
           />
           <TextField
-            label="Password"
-            type="password"
             fullWidth
+            type="password"
+            label="Password"
             margin="normal"
             value={password}
-            onChange={(e) => setPasswordInput(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
+            required
           />
-          <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
-            Login
+          {error && (
+            <Typography color="error" variant="body2">
+              {error}
+            </Typography>
+          )}
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 2 }}
+          >
+            {isRegistering ? "Register" : "Login"}
           </Button>
-        </Box>
-      </Paper>
+        </form>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={isRegistering}
+              onChange={() => {
+                setIsRegistering(!isRegistering);
+                setError("");
+              }}
+              color="primary"
+            />
+          }
+          label="Switch to Register"
+          sx={{ mt: 2 }}
+        />
+      </Box>
     </Container>
   );
 };
