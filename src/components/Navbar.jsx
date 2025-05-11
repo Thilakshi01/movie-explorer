@@ -1,48 +1,29 @@
-import React from "react";
-import { AppBar, Toolbar, Button, Typography, Switch, Box } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import React from 'react';
+import { AppBar, Toolbar, Typography, Switch, Box } from '@mui/material';
+import { Link } from 'react-router-dom';
 
-const Navbar = ({ setDarkMode, user, setUser }) => {
-  const navigate = useNavigate();
-  
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    navigate("/login");
-  };
-
+const Navbar = ({ darkMode, setDarkMode, user }) => {
   return (
-    <AppBar 
-    position="sticky"
-    sx={{backgroundColor:"#8B0000"}}
-    >
-      <Toolbar>
-        <Typography variant="h2" sx={{ flexGrow: 6 }}>
-          <Link to="/" style={{ color: "#000000", textDecoration: "none" }}>
+    <AppBar position="static" color=" #8B0000">
+      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Box>
+          <Typography variant="h1" component={Link} to="/" sx={{ textDecoration: 'none', color: '#000000', mr: 5 }}>
             Moovix
-          </Link>
-        </Typography>
+          </Typography>
+          
+        </Box>
 
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          <Switch onChange={(e) => setDarkMode(e.target.checked)} />
-
-          <Button component={Link} to="/favorites" sx={{ color: "#000000", textTransform: "none", }}>
-          <Typography variant="h2" sx={{ flexGrow: 6 }}></Typography>
-            Favorites
-          </Button>
-
-          {user ? (
-            <Button onClick={handleLogout} sx={{color:"#000000", textTransform: "none"}}>
-              Logout 
-            </Button>
-          )  : (
-            <Button 
-            component={Link} to="/login"
-            sx={{ color: "#000000", textTransform: "none" }}>
-              Login
-            </Button>
-          )}
-        </Box> 
-      </Toolbar>   
+        <Box>
+          <Switch
+            checked={darkMode}
+            onChange={() => setDarkMode(!darkMode)}
+            color="default"
+          />
+          <Typography variant="h5" display="inline" sx={{ ml: 3 }}>
+            {darkMode ? 'Dark' : 'Light'} Mode
+          </Typography>
+        </Box>
+      </Toolbar>
     </AppBar>
   );
 };
